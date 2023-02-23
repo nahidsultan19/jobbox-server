@@ -9,18 +9,17 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.q66zrl2.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.q66zrl2.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dbkknuj.mongodb.net/?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 const run = async () => {
   try {
-    const db = client.db("jobbox");
-    const userCollection = db.collection("user");
-    const jobCollection = db.collection("job");
+    await client.connect();
+    const userCollection = client.db("jobbox").collection("user");
+    const jobCollection = client.db("jobbox").collection("job");
+
+    console.log('db connected');
 
     app.post("/user", async (req, res) => {
       const user = req.body;
