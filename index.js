@@ -21,6 +21,12 @@ const run = async () => {
 
     console.log('db connected');
 
+    app.get("/users", async (req, res) => {
+      const users = userCollection.find({});
+      const result = await users.toArray();
+      res.send(result);
+    })
+
     app.post("/user", async (req, res) => {
       const user = req.body;
 
